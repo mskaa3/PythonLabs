@@ -1,5 +1,6 @@
 import re
 import logging
+#contain: manually converting decimal ip adress to binary
 
 headerList = ["\\[Display]", "\\[Config]", "\\[LogFile]"]
 parse = re.compile(
