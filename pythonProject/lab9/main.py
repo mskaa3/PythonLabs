@@ -1,71 +1,71 @@
-import  argparse
+import argparse
 import smtplib
 import datetime
 import requests
 from bs4 import BeautifulSoup
 
 
-def listNames(letter,page_num):
+def listNames(letter, page_num):
 
-    if page_num==1:
-        page=requests.get('https://wiz.pwr.edu.pl/pracownicy?letter='+letter.upper())
+    if page_num == 1:
+        page = requests.get('https://wiz.pwr.edu.pl/pracownicy?letter='+letter.upper())
     else:
         page = requests.get('https://wiz.pwr.edu.pl/pracownicy/page'+str(page_num)+'.html?letter=' + letter.upper())
 
     soup = BeautifulSoup(page.text, 'html.parser')
 
     name_list = soup.find(class_='row columns').find(class_='column-content')
-    email_list_items=name_list.find_all('p')
+    email_list_items = name_list.find_all('p')
     name_list_items = name_list.find_all('a')
-    counter=1
-    new_list=[]
+    counter = 1
+    new_list = []
 
     for name in name_list_items:
-        if counter>22:
+        if counter > 22:
             new_list.append(name)
-        counter+=1
-    if len(new_list)==0 :
+        counter += 1
+    if len(new_list) == 0:
         print("There is no teacher with a surname starting on letter: "+letter.upper())
-    for name,email in zip(new_list, email_list_items):
-        names=name.contents[0]
-        emails=email.contents[0]
+    for name, email in zip(new_list, email_list_items):
+        names = name.contents[0]
+        emails = email.contents[0]
         print(f'{names}       {emails}')
 
     try:
-        page_num+=1
-        listNames(letter,page_num)
+        page_num += 1
+        listNames(letter, page_num)
     except:
         pass
 
+
 def facts(num):
-    r=requests.get('https://cat-fact.herokuapp.com/facts')
+    r = requests.get('https://cat-fact.herokuapp.com/facts')
     fact_list = []
     for fact in r.json():
         fact_list.append(fact['text'])
-    if num<0 or num>len(fact_list):
+    if num < 0 or num > len(fact_list):
         print('invalid number of facts')
     else:
-        i=1
+        i = 1
         for fact in fact_list:
-            if i<=num:
+            if i <= num:
                 print(fact)
-                i+=1
+                i += 1
 
 
 def read_log(new_file):
-    counter=1
+    counter = 1
     with open(new_file) as my_file:
         for line in my_file:
-            if counter==1:
-                e_adress=line
-                counter+=1
-            elif counter==2:
-                password=line
+            if counter == 1:
+                e_adress = line
+                counter += 1
+            elif counter == 2:
+                password = line
             else:
                 print("Sorry, the program takes first line as email and second as password, nothimh more")
 
-    send(e_adress,password)
-
+    send(e_adress, password)
 
 
 def send(email, passwd):
@@ -73,22 +73,19 @@ def send(email, passwd):
     smtpSrv.starttls()
     smtpSrv.ehlo()
     smtpSrv.login(email, passwd)
-    sender='256519@student.pwr.edu.pl'
-    recipient=['j.moskaaa@gmail.com']
-    SUBJECT =f" Hello sir, today is a beatufiful day with a date: { datetime.datetime.today().strftime('%Y-%m-%d-%H:%M:%S')}"
-    TEXT=f"""
+    sender = '256519@student.pwr.edu.pl'
+    recipient = ['j.moskaaa@gmail.com']
+    SUBJECT = f" Hello sir, today is a beatufiful day with a date: " \
+              f"{ datetime.datetime.today().strftime('%Y-%m-%d-%H:%M:%S')}"
+    TEXT = f"""
     FROM: Julia Moska <256519@student.pwr.edu.pl>\n
     TO: Julia Moska<j.moskaaa@gmail.com>\n
     
     Im so happy to announce, that my code is working
     """
     message = 'Subject: {}\n\n{}'.format(SUBJECT, TEXT)
-    result=smtpSrv.sendmail(sender,recipient,message)
+    result = smtpSrv.sendmail(sender, recipient, message)
     smtpSrv.quit()
-
-
-
-
 
 
 if __name__ == '__main__':
@@ -101,10 +98,9 @@ if __name__ == '__main__':
     if my_args.mail != 'def' and 'My message to the teacher' in my_args.mail:
         print('start')
         read_log('personal.txt')
-    if my_args.cat_facts != 0 and type(my_args.cat_facts)==int:
-        number=my_args.cat_facts
+    if my_args.cat_facts != 0 and type(my_args.cat_facts) == int:
+        number = my_args.cat_facts
         facts(number)
-    if my_args.teachers != 'def' and type(my_args.teachers)==str:
-        letter=my_args.teachers
-        listNames(letter,1)
-
+    if my_args.teachers != 'def' and type(my_args.teachers) == str:
+        letter = my_args.teachers
+        listNames(letter, 1)
