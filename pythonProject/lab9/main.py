@@ -37,6 +37,19 @@ def listNames(letter,page_num):
     except:
         pass
 
+def facts(num):
+    r=requests.get('https://cat-fact.herokuapp.com/facts')
+    fact_list = []
+    for fact in r.json():
+        fact_list.append(fact['text'])
+    if num<0 or num>len(fact_list):
+        print('invalid number of facts')
+    else:
+        i=1
+        for fact in fact_list:
+            if i<=num:
+                print(fact)
+                i+=1
 
 
 def read_log(new_file):
@@ -62,12 +75,12 @@ def send(email, passwd):
     smtpSrv.login(email, passwd)
     sender='256519@student.pwr.edu.pl'
     recipient=['j.moskaaa@gmail.com']
-    SUBJECT =f" Hello sir, today is a beatufiful day: { datetime.datetime.today().strftime('%Y-%m-%d-%H:%M:%S')}"
+    SUBJECT =f" Hello sir, today is a beatufiful day with a date: { datetime.datetime.today().strftime('%Y-%m-%d-%H:%M:%S')}"
     TEXT=f"""
     FROM: Julia Moska <256519@student.pwr.edu.pl>\n
     TO: Julia Moska<j.moskaaa@gmail.com>\n
     
-    Email sent to check if its working
+    Im so happy to announce, that my code is working
     """
     message = 'Subject: {}\n\n{}'.format(SUBJECT, TEXT)
     result=smtpSrv.sendmail(sender,recipient,message)
@@ -85,15 +98,13 @@ if __name__ == '__main__':
     argument.add_argument('--teachers', type=str, help="enter teachers and a letter", default='def')
     my_args = argument.parse_args()
     print(my_args)
-    # if my_args.mail is not 'def' and 'My message to the teacher' in my_args.mail:
-    #     print('start')
-    #     read_log('personal.txt')
-    # if my_args.cat_facts != 0 and type(my_args.cat_facts)==int:
-    #     number=my_args.cat_facts
-    #     print(number)
-    # if my_args.teachers is not 'def' and type(my_args.teachers)==str:
-    #     letter=my_args.teachers
-        # listNames(letter)
+    if my_args.mail != 'def' and 'My message to the teacher' in my_args.mail:
+        print('start')
+        read_log('personal.txt')
+    if my_args.cat_facts != 0 and type(my_args.cat_facts)==int:
+        number=my_args.cat_facts
+        facts(number)
+    if my_args.teachers != 'def' and type(my_args.teachers)==str:
+        letter=my_args.teachers
+        listNames(letter,1)
 
-
-    listNames('e',1)
