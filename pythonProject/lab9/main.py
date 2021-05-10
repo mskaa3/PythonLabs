@@ -13,20 +13,19 @@ def listNames(letter, page_num):
         page = requests.get('https://wiz.pwr.edu.pl/pracownicy/page'+str(page_num)+'.html?letter=' + letter.upper())
 
     soup = BeautifulSoup(page.text, 'html.parser')
+    last_links = soup.find(class_='row columns clearfix')
+    last_links.decompose()
+    menu=soup.find(class_='side-menu')
+    menu.decompose()
+    main = soup.find(class_='home')
+    main.decompose()
 
-    name_list = soup.find(class_='row columns').find(class_='column-content')
-    email_list_items = name_list.find_all('p')
-    name_list_items = name_list.find_all('a')
-    counter = 1
-    new_list = []
+    name_list = soup.find(class_='row columns').select('a',class_='col-text text-content')
+    mail_list = soup.find(class_='row columns').select('p', class_='col-text text-content')
 
-    for name in name_list_items:
-        if counter > 22:
-            new_list.append(name)
-        counter += 1
-    if len(new_list) == 0:
-        print("There is no teacher with a surname starting on letter: "+letter.upper())
-    for name, email in zip(new_list, email_list_items):
+    if len(name_list) == 0:
+         print("There is no teacher with a surname starting on letter: "+letter.upper())
+    for name, email in zip(name_list, mail_list):
         names = name.contents[0]
         emails = email.contents[0]
         print(f'{names}       {emails}')
@@ -104,3 +103,6 @@ if __name__ == '__main__':
     if my_args.teachers != 'def' and type(my_args.teachers) == str:
         letter = my_args.teachers
         listNames(letter, 1)
+
+
+
