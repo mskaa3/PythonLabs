@@ -73,12 +73,11 @@ def send(email, passwd):
     smtpSrv.ehlo()
     smtpSrv.login(email, passwd)
     sender = '256519@student.pwr.edu.pl'
-    recipient = ['j.moskaaa@gmail.com']
+    recipient = ['wojciech.thomas@pwr.edu.pl']
     SUBJECT = f" Hello sir, today is a beatufiful day with a date: " \
               f"{ datetime.datetime.today().strftime('%Y-%m-%d-%H:%M:%S')}"
-    TEXT = f"""
-    FROM: Julia Moska <256519@student.pwr.edu.pl>\n
-    TO: Julia Moska<j.moskaaa@gmail.com>\n
+    TEXT = f"""FROM: Julia Moska <256519@student.pwr.edu.pl>\n
+    TO: Wojciech Thomas<wojciech.thomas@pwr.edu.pl>\n
     
     Im so happy to announce, that my code is working
     """
