@@ -87,6 +87,7 @@ def send(email, passwd):
 
 
 if __name__ == '__main__':
+    
     argument = argparse.ArgumentParser()
     argument.add_argument('--mail', type=str, help="mail command needed", default='def')
     argument.add_argument('--cat-facts', type=int, help="enter cat facts with a number", default=0)
