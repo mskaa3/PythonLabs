@@ -78,10 +78,8 @@ def file_reader(new_file):
                                 word_counter = word_counter + len(line.split())
                             else:
                                 if word_counter != 0:
-                                    if word_counter >= 100:
-                                        word_counter = word_counter-word_counter % 100
-                                    if word_counter < 100:
-                                        word_counter = word_counter - word_counter % 10
+
+                                    word_counter = word_counter - word_counter % 10
                                     paragraph_length_list.append(word_counter)
                                     print(f'Paragraph {paraghraphCounter} and rounded num of words is {word_counter}')
                                     word_counter = 0
